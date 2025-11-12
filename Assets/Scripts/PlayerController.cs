@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 15f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
+    [SerializeField] private int maxJump = 2;
+    private int jumpCount = 0;
     private bool isGround;
     private Animator animator;
     private GameManager gameManager;
@@ -46,17 +48,25 @@ public class PlayerController : MonoBehaviour
     }
     private void HandleJump()
     {
-        if (Input.GetButtonDown("Jump") && isGround)
+        if (Input.GetButtonDown("Jump") && jumpCount < maxJump)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            jumpCount++;
             audioManager.PlayJumpSound();
         }
+        bool wasGrounded = isGround;
         isGround = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        
+        if (isGround && !wasGrounded)
+        {
+            jumpCount = 0;
+        }
+
     }
     private void UpdateAnimation()
     {
         bool isRunning = Mathf.Abs(rb.velocity.x) > 0.1f;
-        bool isJumpping = !isGround;
+        bool isJumpping = jumpCount > 0 || !isGround;
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isJumpping", isJumpping);
         
