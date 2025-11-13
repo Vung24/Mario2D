@@ -33,7 +33,7 @@ public class PlayerCollision : MonoBehaviour
                 Rigidbody2D enemyRb = collision.GetComponent<Rigidbody2D>();
                 if (enemyRb != null)
                 {
-                    enemyRb.velocity = new Vector2(0, 3f);  
+                    enemyRb.velocity = new Vector2(0, -3f);  
                 }
 
                 gameManager.AddScore(3);

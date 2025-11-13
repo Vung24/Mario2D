@@ -69,6 +69,9 @@ public class PlayerController : MonoBehaviour
         bool isJumpping = jumpCount > 0 || !isGround;
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isJumpping", isJumpping);
+    }
+    private void BrickHit()
+    {
         
     }
 }
