@@ -10,10 +10,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private int maxJump = 2;
 
-    // --- tùy chọn: dùng layer hoặc tag để nhận diện brick
-    [SerializeField] private LayerMask brickLayer; // set layer cho bricks trong Inspector
-    [SerializeField] private string brickTag = "Brick"; // hoặc dùng tag
-
     private int jumpCount = 0;
     private bool isGround;
     private Animator animator;
@@ -37,7 +33,7 @@ public class PlayerController : MonoBehaviour
         UpdateAnimation();
     }
 
-    private void HandleMovement()
+    public void HandleMovement()
     {
         float moveInput = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
@@ -45,7 +41,7 @@ public class PlayerController : MonoBehaviour
         else if (moveInput < 0) transform.localScale = new Vector3(-1, 1, 1);
     }
 
-    private void HandleJump()
+    public void HandleJump()
     {
         if (Input.GetButtonDown("Jump") && jumpCount < maxJump)
         {
@@ -69,6 +65,13 @@ public class PlayerController : MonoBehaviour
         bool isJumpping = jumpCount > 0 || !isGround;
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isJumpping", isJumpping);
+    }
+    private void OTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Brick")
+        {
+            
+        }
     }
     /*
     private void OnCollisionEnter2D(Collision2D collision)

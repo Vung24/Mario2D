@@ -6,10 +6,12 @@ public class PlayerCollision : MonoBehaviour
 {
     private GameManager gameManager;
     private AudioManager audioManager;
+    private PlayerController playerController;
     private void Awake()
     {
         gameManager = FindAnyObjectByType<GameManager>();
         audioManager = FindAnyObjectByType<AudioManager>();
+        playerController = FindAnyObjectByType<PlayerController>();
 
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -28,16 +30,16 @@ public class PlayerCollision : MonoBehaviour
         {
             Rigidbody2D playerRb = GetComponent<Rigidbody2D>();
 
-            if (playerRb.velocity.y < -0.1f)  
+            if (playerRb.velocity.y < -0.1f)
             {
                 Rigidbody2D enemyRb = collision.GetComponent<Rigidbody2D>();
                 if (enemyRb != null)
                 {
-                    enemyRb.velocity = new Vector2(0, -3f);  
+                    enemyRb.velocity = new Vector2(0, -3f);
                 }
 
                 gameManager.AddScore(3);
-                Destroy(collision.gameObject, 0.5f); 
+                Destroy(collision.gameObject, 0.5f);
             }
             else
             {
