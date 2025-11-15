@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     private GameManager gameManager;
     private Rigidbody2D rb;
     private AudioManager audioManager;
+    private Collider2D myCollider;
+
 
     private void Awake()
     {
@@ -23,6 +25,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         gameManager = FindObjectOfType<GameManager>();
         audioManager = FindAnyObjectByType<AudioManager>();
+        myCollider = FindAnyObjectByType<Collider2D>();
     }
 
     void Update()
@@ -41,7 +44,7 @@ public class PlayerController : MonoBehaviour
         else if (moveInput < 0) transform.localScale = new Vector3(-1, 1, 1);
     }
 
-    public void HandleJump()
+    private void HandleJump()
     {
         if (Input.GetButtonDown("Jump") && jumpCount < maxJump)
         {
@@ -50,13 +53,32 @@ public class PlayerController : MonoBehaviour
             audioManager.PlayJumpSound();
         }
 
+        // ✅ FIX: Kiểm tra đứng trên Brick + Ground
         bool wasGrounded = isGround;
         isGround = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+
+        // THÊM: Kiểm tra đứng trên Brick (nếu Brick không trong groundLayer)
+        if (!isGround)
+        {
+            isGround = IsStandingOnBrick();
+        }
 
         if (isGround && !wasGrounded)
         {
             jumpCount = 0;
         }
+    }
+    private bool IsStandingOnBrick()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, 0.2f);
+        foreach (Collider2D col in colliders)
+        {
+            if (col.CompareTag("Brick"))
+            {
+                return true;  // Đứng trên Brick → coi như Ground!
+            }
+        }
+        return false;
     }
 
     private void UpdateAnimation()
@@ -66,51 +88,18 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isJumpping", isJumpping);
     }
-    private void OTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.tag == "Brick")
-        {
-            
-        }
-    }
-    /*
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        bool isBrick = false;
-        if (!string.IsNullOrEmpty(brickTag) && collision.gameObject.CompareTag(brickTag))
-            isBrick = true;
-        else if (((1 << collision.gameObject.layer) & brickLayer) != 0)
-            isBrick = true;
-
-        if (!isBrick) return;
-
-        // Duyệt contact points để tìm điểm va chạm phía trên đầu player
-        foreach (ContactPoint2D cp in collision.contacts)
+        if (collision.gameObject.CompareTag("Brick"))
         {
-            // cp.point là world position của điểm chạm
-            // so sánh với vị trí player (có thể dùng transform.position.y hoặc một head offset)
-            float playerHeadY = transform.position.y + (GetComponent<Collider2D>().bounds.extents.y * 0.6f); // khoảng đầu
-            if (cp.point.y > playerHeadY)
+            if (this.transform.position.y < collision.transform.position.y)
             {
-                // Va chạm vào phần trên của player (đập gạch từ dưới)
-                // Gọi Brick.Hit() nếu có, hoặc trigger Animator trực tiếp
-                Brick brick = collision.collider.GetComponent<Brick>();
+                Brick brick = collision.gameObject.GetComponent<Brick>();
                 if (brick != null)
                 {
-                    brick.Hit();
+                    brick?.OnHitBrick();
                 }
-                else
-                {
-                    Animator a = collision.collider.GetComponent<Animator>();
-                    if (a != null)
-                    {
-                        a.SetTrigger("Hit");
-                    }
-                }
-
-                // Có thể break nếu chỉ cần xử lý 1 lần
-                break;
             }
         }
-    } */
+    }
 }

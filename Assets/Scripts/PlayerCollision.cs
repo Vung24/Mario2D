@@ -6,13 +6,10 @@ public class PlayerCollision : MonoBehaviour
 {
     private GameManager gameManager;
     private AudioManager audioManager;
-    private PlayerController playerController;
     private void Awake()
     {
         gameManager = FindAnyObjectByType<GameManager>();
         audioManager = FindAnyObjectByType<AudioManager>();
-        playerController = FindAnyObjectByType<PlayerController>();
-
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
