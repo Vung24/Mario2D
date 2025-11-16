@@ -217,8 +217,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myType: 0
-  _sprNormal: {fileID: -1085677023, guid: d7b55676065b2364caf347af5dd855bf, type: 3}
-  _sprSecret: {fileID: 1378927820, guid: d7b55676065b2364caf347af5dd855bf, type: 3}
+  _sprNormal: {fileID: 543517827, guid: d7b55676065b2364caf347af5dd855bf, type: 3}
+  _sprSecret1: {fileID: -780960551, guid: d7b55676065b2364caf347af5dd855bf, type: 3}
+  _sprSecret2: {fileID: -2064418589, guid: d7b55676065b2364caf347af5dd855bf, type: 3}
   _mySpriteRender: {fileID: 8950926801592947255}
   _objCoinEarn: {fileID: 7963369903935872614}
 --- !u!61 &2438652602034579077

@@ -62,6 +62,9 @@ TagManager:
   - name: Enemy
     uniqueID: 3712745947
     locked: 0
+  - name: Brick
+    uniqueID: 1455572165
+    locked: 0
   - name: Key
     uniqueID: 226872183
     locked: 0
