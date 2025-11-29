@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerCollision : MonoBehaviour
 {
@@ -46,7 +47,11 @@ public class PlayerCollision : MonoBehaviour
         else if (collision.CompareTag("Key"))
         {
             Destroy(collision.gameObject);
-            gameManager.GameWin();
+            string currentScene = SceneManager.GetActiveScene().name;
+            if (currentScene == "Game")
+            {
+                SceneManager.LoadScene("Game1");
+            }
         }
         else if (collision.CompareTag("River"))
         {
